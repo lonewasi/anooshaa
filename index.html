@@ -201,7 +201,16 @@
     openBtn.addEventListener('click', ()=>{
       for(let i=0;i<8;i++) setTimeout(createHeart, i*250);
     });
+    const bgMusic = document.getElementById('bgMusic');
+
+openBtn.addEventListener('click', () => {
+  loveLetter.style.display = 'none';
+  mainCard.style.display = 'block';
+  bgMusic.play(); // start music
+});
+
   </script>
+<audio id="bgMusic" src="bg-music.mp3" autoplay loop></audio>
 
 </body>
 </html>
