@@ -114,8 +114,10 @@ body {
   border: none;
 }
 
-#sentBtn { background:#ff4da6; color:white; }
-#notSentBtn { background:#666; color:white; }
+#sentBtn { background:#db3689; color:white; }
+#notSentBtn { background:#c70909; color:white; }
+
+
 
 @keyframes shake {
   0%,100%{transform: translateX(0);}
@@ -139,7 +141,7 @@ body {
   <div id="alertBox">
     <p>Your answer:</p>
     <p id="typedAnswer" style="color:#ff1493;font-weight:bold;"></p>
-    <p>Take screenshot & send on WhatsApp 😘</p>
+    <p>Take screenshot & send on WhatsApp Jaldi</p>
     <div class="alert-btns">
       <button id="sentBtn" class="alert-btn">I sent 💌</button>
       <button id="notSentBtn" class="alert-btn">I won't 😤</button>
@@ -158,22 +160,24 @@ music.play();
 const quiz = [
   { q:"Tu Khush hai?", type:"mcq", opts:["Nhi","Haan"] },
   { q:"Kiss ya Hug?", type:"mcq", opts:["Kiss","Hug"] },
-  { q:"Tu thodi pagal hai na?", type:"mcq", opts:["Haan","Nahi"] },
-  { q:"Sabsay khoobsurat year?", type:"mcq", opts:["2015","2016","2025"] },
-  { q:"Proof kya hai mai tumhara hoon?", type:"mcq", opts:["Pata nahi","Mai kehti hoon","Goli khaungi"] },
-  { q:"Din me kitni baar yaad karti?", type:"mcq", opts:["5","10","Nahi karti","Kyu bolun","Hehe"] },
-  { q:"Agar phn na uthau to?", type:"mcq", opts:["Normal","Satak jaati ho"] },
-  { q:"Hum kafi hain ek duje ke liye?", type:"mcq", opts:["Haan","Nahi pata"] },
+  { q:"humai be apsai pyaar hai ?", type:"mcq", opts:["Hona chahiye","jhoot"] },
+  { q:"Sabsay khoobsurat year humarai relation ka ?", type:"mcq", opts:["2015","2016","2025"] },
+  { q:"Proof kya hai mai tumhara hoon sirf ?", type:"mcq", opts:["Pata nahi","Mai kehti hoon","Goli khaungi"] },
+  { q:"Din me kitni baar yaad karti ho ?", type:"mcq", opts:["5","10","Nahi karti","Kyu bolun","Hehe"] },
+  { q:"Agar phn na uthau to mood kaisa hota hai ?", type:"mcq", opts:["Normal","Satak jaati hun "] },
+  { q:"Hum kafi hain ek dusre ke liye?", type:"mcq", opts:["Haan","Nahi pata"] },
+  { q:"yeh sab dekh kr acha laga ?", type:"mcq", opts:["Haan","Nahi toh "] },
 
-  { q:"Tum mujhe sone nahi deti kyun?", type:"input" },
+  { q:"Tum mujhe sone  kyu nhi deti ?", type:"input" },
   { q:"Tum kab kab natak karti ho?", type:"input" },
-  { q:"Sabse zyada pyaar kab aata hai?", type:"input" },
-  { q:"Phone uthate hi kya bolti ho?", type:"input" },
-  { q:"Tumhare dushman kaun?", type:"input" },
+  { q:"Sabse zyada pyaar kab aata hai mujpar ?", type:"input" },
+  { q:"Meri nazar be tum par hai bus mai nhi batata ? is barai mai kuch ?", type:"input" },
+  { q:"Tumhare dushman kaun hai haha answer pata hai mujhe ?", type:"input" },
   { q:"Tum mujhe kya kehna chahti ho?", type:"input" },
   { q:"Superhero bano to power kya hogi?", type:"input" },
-  { q:"Hum dono me se drama king/queen?", type:"input" },
+  { q:"Hum dono me se drama king/queen kon hai ?", type:"input" },
   { q:"Funniest memory?", type:"input" },
+  { q:"will you marry me ?", type:"input" },
 ];
 
 let idx = 0;
