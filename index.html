@@ -207,10 +207,19 @@ openBtn.addEventListener('click', () => {
   loveLetter.style.display = 'none';
   mainCard.style.display = 'block';
   bgMusic.play(); // start music
+  openBtn.addEventListener('click', () => {
+  loveLetter.style.display = 'none';
+  mainCard.style.display = 'block';
+
+  bgMusic.muted = false; 
+  bgMusic.play();
+});
+
 });
 
   </script>
-<audio id="bgMusic" src="bg-music.mp3" autoplay loop></audio>
+<audio id="bgMusic" src="WhatsApp Audio 2025-11-09 at 13.56.54_929a205b.mp3" autoplay loop muted></audio>
+
 
 </body>
 </html>
