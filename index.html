@@ -166,58 +166,77 @@
     <div class="small">Open on phone or desktop — it's responsive.</div>
   </div>
 
-  <script>
-    // TRANSITION FROM LOVE LETTER TO MAIN CARD
-    const loveLetter = document.getElementById('loveLetter');
-    const mainCard = document.querySelector('.main-card');
-    const openBtn = document.getElementById('openBtn');
+  
+<script>
+  const loveLetter = document.getElementById('loveLetter');
+  const mainCard = document.querySelector('.main-card');
+  const openBtn = document.getElementById('openBtn');
+  const bgMusic = document.getElementById('bgMusic');
 
-    openBtn.addEventListener('click', () => {
-      loveLetter.style.display = 'none';
-      mainCard.style.display = 'block';
-    });
-
-    // create floating hearts
-    function createHeart() {
-      const el = document.createElement('div');
-      el.className = 'heart';
-      el.innerText = '💖';
-      el.style.left = Math.random() * 100 + 'vw';
-      const size = 14 + Math.random() * 28;
-      el.style.fontSize = size + 'px';
-      const dur = 5 + Math.random() * 6;
-      el.style.animation = `floatUp ${dur}s linear`;
-      document.body.appendChild(el);
-      setTimeout(()=> el.remove(), (dur*1000)+200);
-    }
-
-    // spawn hearts only after main card is visible
-    mainCard.addEventListener('transitionend', ()=> {});
-    setInterval(() => {
-      if(mainCard.style.display === 'block') createHeart();
-    }, 350);
-
-    // spawn a few hearts at first when main card opens
-    openBtn.addEventListener('click', ()=>{
-      for(let i=0;i<8;i++) setTimeout(createHeart, i*250);
-    });
-    const bgMusic = document.getElementById('bgMusic');
-
-openBtn.addEventListener('click', () => {
-  loveLetter.style.display = 'none';
-  mainCard.style.display = 'block';
-  bgMusic.play(); // start music
+  // When user clicks "Open Our Quiz"
   openBtn.addEventListener('click', () => {
-  loveLetter.style.display = 'none';
-  mainCard.style.display = 'block';
+    loveLetter.style.display = 'none';
+    mainCard.style.display = 'block';
 
-  bgMusic.muted = false; 
-  bgMusic.play();
-});
+    bgMusic.muted = false;
+    bgMusic.play();
 
-});
+    // burst animation (hearts + flowers)
+    for (let i = 0; i < 8; i++) {
+      setTimeout(createHeart, i * 200);
+      setTimeout(createFlower, i * 200);
+    }
+  });
 
-  </script>
+  // Floating hearts
+  function createHeart() {
+    const el = document.createElement('div');
+    el.className = 'heart';
+    el.innerText = '💖';
+
+    el.style.left = Math.random() * 100 + 'vw';
+    const size = 14 + Math.random() * 28;
+    el.style.fontSize = size + 'px';
+
+    const dur = 5 + Math.random() * 6;
+    el.style.animation = `floatUp ${dur}s linear`;
+
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), (dur * 1000) + 200);
+  }
+
+  // Floating flowers
+  function createFlower() {
+    const el = document.createElement('div');
+    el.className = 'flower';
+
+    const flowers = ['🌸', '💐', '🌺', '🌼', '🌻'];
+    el.innerText = flowers[Math.floor(Math.random() * flowers.length)];
+
+    el.style.left = Math.random() * 100 + 'vw';
+    const size = 20 + Math.random() * 30;
+    el.style.fontSize = size + 'px';
+
+    const dur = 5 + Math.random() * 6;
+    el.style.animation = `floatUp ${dur}s linear`;
+
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), (dur * 1000) + 200);
+  }
+
+  // continuous floating (hearts + flowers)
+  setInterval(() => {
+    if (mainCard.style.display === 'block') {
+      createHeart();
+      createFlower();
+    }
+  }, 350);
+</script>
+
+
+
+
+
 <audio id="bgMusic" src="WhatsApp Audio 2025-11-09 at 13.56.54_929a205b.mp3" autoplay loop muted></audio>
 
 
