@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>For Anoosha — Start</title>
+  <style>
+    :root {
+      --pink1: #d47b8a;
+      --pink2: #df14bd;
+      --accent: #3f2432;
+      --glass: rgba(255,255,255,0.18);
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      overflow:hidden;
+      color:#fff;
+      text-align:center;
+      padding:20px;
+      background: linear-gradient(135deg,var(--pink1),var(--pink2));
+    }
+
+    /* --- LOVE LETTER SCREEN --- */
+    .love-letter {
+      position:fixed;
+      top:0; left:0;
+      width:100%; height:100%;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      background: linear-gradient(135deg,var(--pink1),var(--pink2));
+      text-align:center;
+      padding:20px;
+      z-index:9999;
+      animation: fadeIn 1s ease forwards;
+    }
+
+    .love-letter h1{
+      font-size:2rem;
+      margin-bottom:12px;
+      text-shadow: 0 4px 18px rgba(255,255,255,0.12);
+    }
+    .love-letter p{
+      font-size:1.1rem;
+      line-height:1.5;
+      margin-bottom:20px;
+      color: rgba(255,255,255,0.95);
+    }
+
+    .love-letter button{
+      padding:12px 22px;
+      border-radius:999px;
+      background:#fff;
+      color:var(--accent);
+      font-weight:600;
+      border:none;
+      cursor:pointer;
+      transition:transform .18s ease;
+      box-shadow: 0 6px 20px rgba(255,77,166,0.12);
+    }
+    .love-letter button:active{ transform:scale(.98) }
+
+    @keyframes fadeIn {
+      from {opacity:0;}
+      to {opacity:1;}
+    }
+
+    /* --- MAIN CARD --- */
+    .main-card{
+      display:none;
+      width:100%;
+      max-width:520px;
+      background:var(--glass);
+      border-radius:18px;
+      padding:34px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+      transform: translateY(-10px);
+      margin: auto;
+      position:relative;
+      top:50%;
+      transform: translateY(-50%);
+    }
+
+    h1{
+      font-size:1.9rem;
+      margin:0 0 10px;
+      text-shadow: 0 4px 18px rgba(255,255,255,0.12);
+    }
+
+    p.lead{
+      margin:0 0 18px;
+      line-height:1.4;
+      color:rgba(255,255,255,0.95);
+    }
+
+    .start-btn{
+      display:inline-block;
+      padding:12px 22px;
+      border-radius:999px;
+      background: #fff;
+      color:var(--accent);
+      font-weight:600;
+      text-decoration:none;
+      border:none;
+      cursor:pointer;
+      transition:transform .18s ease;
+      box-shadow: 0 6px 20px rgba(255,77,166,0.12);
+    }
+    .start-btn:active{ transform:scale(.98) }
+
+    /* floating hearts */
+    .heart {
+      position:fixed;
+      bottom:-40px;
+      pointer-events:none;
+      font-size:18px;
+      opacity:0.9;
+      transform-origin:center;
+      will-change:transform,opacity;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) rotate(0) scale(1); opacity:1; }
+      100% { transform: translateY(-120vh) rotate(360deg) scale(1.6); opacity:0; }
+    }
+
+    /* small footer */
+    .small {
+      margin-top:14px;
+      font-size:.9rem;
+      color: rgba(255,255,255,0.92);
+      opacity:.95;
+    }
+
+    @media (max-width:420px){
+      .main-card{ padding:22px }
+      h1{ font-size:1.5rem }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOVE LETTER SCREEN -->
+  <div class="love-letter" id="loveLetter">
+    <h1>Dear Anoosha 💌</h1>
+    <p>Six years of laughter, small storms, filmi moments with relatives… and still — together. 💖</p>
+    <p>"" bina yeh sab itna mazaa nahi aata, hai na? 😏💖 💖</p>
+    <p>"tum hass kyu rahe ho jali sai neechai button par click karo bandhar "</p>
+    <button id="openBtn">Open Our Quiz 💞</button>
+  </div>
+
+  <!-- MAIN CARD -->
+  <div class="main-card" role="main" aria-labelledby="title">
+    <h1 id="title">For Anoosha 💖</h1>
+    <p class="lead">
+      Our six years — the laughs, the small storms, the filmi moments with relatives, and still — together.
+    </p>
+
+    <a class="start-btn" href="quiz.html" id="startBtn">Start Our 6-Year Quiz 💞</a>
+    <div class="small">Open on phone or desktop — it's responsive.</div>
+  </div>
+
+  <script>
+    // TRANSITION FROM LOVE LETTER TO MAIN CARD
+    const loveLetter = document.getElementById('loveLetter');
+    const mainCard = document.querySelector('.main-card');
+    const openBtn = document.getElementById('openBtn');
+
+    openBtn.addEventListener('click', () => {
+      loveLetter.style.display = 'none';
+      mainCard.style.display = 'block';
+    });
+
+    // create floating hearts
+    function createHeart() {
+      const el = document.createElement('div');
+      el.className = 'heart';
+      el.innerText = '💖';
+      el.style.left = Math.random() * 100 + 'vw';
+      const size = 14 + Math.random() * 28;
+      el.style.fontSize = size + 'px';
+      const dur = 5 + Math.random() * 6;
+      el.style.animation = `floatUp ${dur}s linear`;
+      document.body.appendChild(el);
+      setTimeout(()=> el.remove(), (dur*1000)+200);
+    }
+
+    // spawn hearts only after main card is visible
+    mainCard.addEventListener('transitionend', ()=> {});
+    setInterval(() => {
+      if(mainCard.style.display === 'block') createHeart();
+    }, 350);
+
+    // spawn a few hearts at first when main card opens
+    openBtn.addEventListener('click', ()=>{
+      for(let i=0;i<8;i++) setTimeout(createHeart, i*250);
+    });
+  </script>
+
+</body>
+</html>

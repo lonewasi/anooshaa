@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mixed Quiz — MCQ + Open Answers</title>
+<style>
+/* Body & card */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  overflow: hidden;
+  position: relative;
+  background: linear-gradient(135deg, #ffe6f3, #fff0f5);
+}
+
+/* Floating hearts background */
+.heart-bg {
+  position: absolute;
+  font-size: 20px;
+  color: #ff4da6;
+  animation: floatHeart 8s linear infinite;
+  opacity: 0;
+}
+
+@keyframes floatHeart {
+  0% { transform: translateY(100vh) rotate(0deg); opacity:0; }
+  50% { opacity:1; }
+  100% { transform: translateY(-20vh) rotate(360deg); opacity:0; }
+}
+
+/* Flower petals falling */
+.petal {
+  position: absolute;
+  font-size: 24px;
+  color: #ff69b4;
+  animation: fallPetal linear forwards;
+}
+
+@keyframes fallPetal {
+  0% { transform: translateY(-50px) rotate(0deg); opacity:0; }
+  50% { opacity:1; }
+  100% { transform: translateY(100vh) rotate(360deg); opacity:0; }
+}
+
+/* Quiz card */
+#card {
+  background: rgba(255,255,255,0.9);
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  max-width: 600px;
+  width: 90%;
+  z-index: 2;
+  position: relative;
+}
+
+.option-btn {
+  display: block;
+  width: 100%;
+  margin: 8px 0;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: #ff4da6;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  transition: transform 0.2s;
+}
+.option-btn:hover { transform: scale(1.05); }
+
+.answer-input {
+  width: 100%;
+  margin: 8px 0;
+  padding: 10px;
+  border-radius: 10px;
+  border: 2px solid #ff4da6;
+  font-size: 14px;
+  resize: vertical;
+  min-height: 60px;
+}
+#progress {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #ff1493;
+}
+
+/* Popup overlay */
+#overlay {
+  position: fixed;
+  top:0; left:0; right:0; bottom:0;
+  background: rgba(0,0,0,0.4);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+#alertBox {
+  background: rgba(255,255,255,0.95);
+  border-radius: 15px;
+  padding: 25px;
+  text-align: center;
+  max-width: 400px;
+  box-shadow: 0 8px 25px rgba(255,77,166,0.3);
+}
+#alertBox p { margin: 15px 0; font-size:16px; color:#333; }
+#alertBox #typedAnswer { color:#ff1493; font-weight:bold; }
+.alert-btns { display:flex; justify-content:center; gap:15px; margin-top:20px; }
+.alert-btn {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border:none;
+  cursor:pointer;
+  font-size: 14px;
+  transition:0.3s;
+}
+#sentBtn { background:#ff4da6; color:white; }
+#notSentBtn { background:#999; color:white; }
+@keyframes shake {
+  0%,100%{transform: translateX(0);}
+  25%{transform: translateX(-5px);}
+  50%{transform: translateX(5px);}
+  75%{transform: translateX(-5px);}
+}
+</style>
+</head>
+<body>
+
+<div id="card">
+  <h2 id="question"></h2>
+  <div id="options"></div>
+  <p id="progress"></p>
+</div>
+
+<!-- Custom alert overlay -->
+<div id="overlay">
+  <div id="alertBox">
+    <p>Your answer:</p>
+    <p id="typedAnswer"></p>
+    <p>Take a screenshot and send it on WhatsApp 😘</p>
+    <div class="alert-btns">
+      <button id="sentBtn" class="alert-btn">I sent 💌</button>
+      <button id="notSentBtn" class="alert-btn">I won't send 😤</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const quiz = [
+  { q: "Tu Khush hai ?", type:"mcq", opts:["Nhi "," Haan ",] },
+  { q: "Abhe kiss daina chahati ho ya hug ?", type:"mcq", opts:["kiss "," hug ",] },
+  { q: "TUm thodi pagal ho na   ?", type:"mcq", opts:["haan "," na  ",] },
+  { q: "humarai relationship ka sab sai khoobsurat year  ", type:"mcq", opts:["2015"," 2016"," 2025"  ,] },
+  { q: "Tumhare pass kya proof hai mai tumhara HUn ?", type:"mcq", opts:["Pata nhi"," mai kehti hun na ","goli kha kar manogai tum ab  ",,] },
+  { q: "Din mai kitni baar mujhe yaadh  krti ", type:"mcq", opts:["5"," 10 ","nhi karti  ","mai kyu bolun ","hehe",] },
+  { q: "agar mai tumhara phn na uthawun toh tumharea reaction kya hota hai  ", type:"mcq", opts:["normal "," satak jati hai  ",] },
+  { q: "hum ek dusrai kai liye kafi hai  ", type:"mcq", opts:["haan"," abhe nhi pata  ",] },
+  { q: "Tum mujhe sonai kyu nhi dainai daite :", type:"input" },
+  { q: "TUm kab kab natak krti ho  :", type:"input" },
+  { q: " sab sai xada pyaar tumhe mujpar kab ata hai  :", type:"input" },
+  { q: " tum phn utha kar sab sai pehle bolo kya kyu bolti ho  ?:", type:"input" },
+  { q: " tumhare dushman kon kon hai :", type:"input" },
+  { q: " tum mujhe kya kehna chahati ho jo tumhe lagta hai mujhe nhi pata :", type:"input" },
+  { q: " Agar tum ek superhero bano, toh tumhari power kya hoti:", type:"input" },
+  { q: " AHum dono mein se kaun jyada drama karta hai?:", type:"input" },
+  { q: " Tumhara funniest memory kya hai hum dono ka saath mein?:", type:"input" },
+  { q: " Tumhara funniest memory kya hai hum dono ka saath mein?:", type:"input" }  
+];
+
+let idx = 0;
+const qEl = document.getElementById("question");
+const optsEl = document.getElementById("options");
+const progEl = document.getElementById("progress");
+const overlay = document.getElementById("overlay");
+const typedAnswerEl = document.getElementById("typedAnswer");
+const sentBtn = document.getElementById("sentBtn");
+const notSentBtn = document.getElementById("notSentBtn");
+
+// ----------------- Floating Hearts -----------------
+function createHearts(count = 20) {
+  for(let i=0;i<count;i++){
+    const heart = document.createElement("div");
+    heart.className="heart-bg";
+    heart.textContent="💖";
+    heart.style.left=Math.random()*90+"%";
+    heart.style.animationDuration=(5+Math.random()*5)+"s";
+    heart.style.fontSize=(15+Math.random()*20)+"px";
+    document.body.appendChild(heart);
+  }
+}
+
+// ----------------- Flower Petals -----------------
+function spawnPetal(){
+  const petal = document.createElement("div");
+  petal.className="petal";
+  petal.textContent="🌸";
+  petal.style.left=Math.random()*100+"%";
+  petal.style.animationDuration=(4+Math.random()*4)+"s";
+  petal.style.fontSize=(15+Math.random()*25)+"px";
+  document.body.appendChild(petal);
+  setTimeout(()=> petal.remove(),8000);
+}
+
+function createPetals(duration = 4000){
+  const interval = setInterval(spawnPetal, 200);
+  setTimeout(()=> clearInterval(interval), duration);
+}
+
+// ----------------- Show Questions -----------------
+function showQuestion(i){
+  if(i >= quiz.length){
+    qEl.textContent=" I LOVE YOU SO MUCH  ANOOSHA 💞";
+    optsEl.innerHTML="";
+    progEl.textContent="";
+    return;
+  }
+
+  const item = quiz[i];
+  qEl.textContent = item.q;
+  optsEl.innerHTML="";
+
+  if(item.type === "mcq"){
+    item.opts.forEach(opt=>{
+      const btn = document.createElement("button");
+      btn.className = "option-btn";
+      btn.textContent = opt;
+
+      btn.onclick = ()=>{
+        // Show custom overlay for MCQ
+        typedAnswerEl.textContent = opt;
+        overlay.style.display = "flex";
+
+        sentBtn.onclick = ()=>{
+          overlay.style.display="none";
+          createPetals(5000);
+          idx++;
+          showQuestion(idx);
+        }
+
+        notSentBtn.onclick = ()=>{
+          notSentBtn.style.animation="shake 0.5s";
+          setTimeout(()=> notSentBtn.style.animation="",500);
+        }
+      }
+
+      optsEl.appendChild(btn);
+    });
+  } else if(item.type === "input"){
+    const textarea = document.createElement("textarea");
+    textarea.className="answer-input";
+    textarea.placeholder="Type your answer here...";
+    optsEl.appendChild(textarea);
+
+    textarea.addEventListener("keypress", function(e){
+      if(e.key === "Enter" && !e.shiftKey){
+        e.preventDefault();
+        submitAnswer(textarea.value);
+      }
+    });
+
+    const submitBtn = document.createElement("button");
+    submitBtn.textContent = "Submit";
+    submitBtn.style.marginTop = "10px";
+    submitBtn.style.padding = "8px 16px";
+    submitBtn.style.border = "none";
+    submitBtn.style.borderRadius = "8px";
+    submitBtn.style.background = "#ff4da6";
+    submitBtn.style.color = "white";
+    submitBtn.style.cursor = "pointer";
+    submitBtn.onclick = ()=> submitAnswer(textarea.value);
+    optsEl.appendChild(submitBtn);
+  }
+
+  progEl.textContent = `Question ${i+1} / ${quiz.length}`;
+}
+
+// ----------------- Submit Input Answer -----------------
+function submitAnswer(ans){
+  if(ans.trim() === ""){
+    alert("Please write something!");
+    return;
+  }
+
+  typedAnswerEl.textContent = ans;
+  overlay.style.display = "flex";
+
+  sentBtn.onclick = ()=>{
+    overlay.style.display = "none";
+    createPetals(5000); // petals for 5 seconds
+    idx++;
+    showQuestion(idx);
+  }
+
+  notSentBtn.onclick = ()=>{
+    notSentBtn.style.animation="shake 0.5s";
+    setTimeout(()=> notSentBtn.style.animation="",500);
+  }
+}
+
+// ----------------- Initialize -----------------
+createHearts();
+showQuestion(idx);
+
+
+</script>
+
+</body>
+</html>
