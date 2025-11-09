@@ -12,48 +12,126 @@
       --glass: rgba(255,255,255,0.18);
     }
 
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      min-height:100vh;
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
       font-family: "Poppins";
-      overflow:hidden;
-      color:#fff;
-      text-align:center;
-      padding:20px;
-      background: linear-gradient(135deg,var(--pink1),var(--pink2));
+      overflow: hidden;
+      color: #fff;
+      text-align: center;
+      background: linear-gradient(135deg, var(--pink1), var(--pink2));
     }
 
+    /* Love letter screen */
     .love-letter {
-      position:fixed; top:0; left:0; width:100%; height:100%;
-      display:flex; flex-direction:column;
-      align-items:center; justify-content:center;
-      background: linear-gradient(135deg,var(--pink1),var(--pink2));
-      padding:20px; z-index:9999;
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
       animation: fadeIn 1s ease forwards;
+      background: linear-gradient(135deg, var(--pink1), var(--pink2));
+      z-index: 9999;
     }
 
-    .main-card{
-      display:none; width:100%; max-width:520px;
-      background:var(--glass); border-radius:18px; padding:34px;
+    .love-letter h1 {
+      font-size: 2rem;
+      margin-bottom: 12px;
+      text-shadow: 0 4px 18px rgba(255,255,255,0.2);
+    }
+
+    .love-letter p {
+      font-size: 1.1rem;
+      margin-bottom: 18px;
+      max-width: 350px;
+      color: rgba(255,255,255,0.95);
+    }
+
+    .love-letter button {
+      padding: 12px 30px;
+      border-radius: 999px;
+      background: #fff;
+      color: var(--accent);
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+    }
+
+    /* Main card */
+    .main-card {
+      display: none;
+      width: 90%;
+      max-width: 520px;
+      background: var(--glass);
       backdrop-filter: blur(8px);
-      position:absolute; left:50%; top:50%;
+      border-radius: 20px;
+      padding: 30px;
+      position: absolute;
+      left: 50%;
+      top: 50%;
       transform: translate(-50%, -50%);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     }
 
-    .heart, .flower {
-      position:fixed; bottom:-40px; pointer-events:none;
-      will-change:transform,opacity;
+    .main-card h1 {
+      margin: 0 0 10px;
+      font-size: 1.9rem;
+      text-shadow: 0 4px 18px rgba(255,255,255,0.2);
+    }
+
+    .main-card .lead {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.9);
+      margin-bottom: 20px;
+    }
+
+    .start-btn {
+      display: inline-block;
+      margin-top: 12px;
+      background: white;
+      color: var(--accent);
+      padding: 12px 26px;
+      border-radius: 999px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      font-size: 1rem;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+    }
+
+    /* Floating flowers */
+    .flower {
+      position: fixed;
+      bottom: -40px;
+      pointer-events: none;
     }
 
     @keyframes floatUp {
-      0% { transform: translateY(0) rotate(0); opacity:1; }
-      100% { transform: translateY(-120vh) rotate(360deg); opacity:0; }
+      0% { transform: translateY(0) rotate(0); opacity: 1; }
+      100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @media (max-width: 420px) {
+      .love-letter h1 { font-size: 1.6rem; }
+      .main-card h1 { font-size: 1.6rem; }
+      .start-btn { font-size: .9rem; }
     }
   </style>
 </head>
 <body>
 
+  <!-- Screen 1 -->
   <div class="love-letter" id="loveLetter">
     <h1>Dear Anoosha 💌</h1>
     <p>Six years of laughter, storms and still — together.</p>
@@ -61,6 +139,7 @@
     <button id="openBtn">Open Our Quiz 💞</button>
   </div>
 
+  <!-- Screen 2 -->
   <div class="main-card" id="mainCard">
     <h1>For Anoosha 💖</h1>
     <p class="lead">Our six years — laughter, storms and filmi moments.</p>
@@ -80,25 +159,13 @@
     bgMusic.muted = false;
     bgMusic.play();
 
-    for (let i = 0; i < 10; i++) {
-      setTimeout(createHeart, i * 150);
+    for (let i = 0; i < 12; i++) {
       setTimeout(createFlower, i * 150);
     }
   });
 
-  function createHeart() {
-    const el = document.createElement('div');
-    el.className = 'heart';
-    el.innerText = '💖';
-    el.style.left = Math.random()*100 + 'vw';
-    el.style.fontSize = (14 + Math.random()*28) + 'px';
-    el.style.animation = `floatUp ${6+Math.random()*6}s linear`;
-    document.body.appendChild(el);
-    setTimeout(()=> el.remove(), 8000);
-  }
-
   function createFlower() {
-    const flowers = ['🌸','💐','🌺','🌼','🌻'];
+    const flowers = ['🌸', '💐', '🌺', '🌼', '🌻'];
     const el = document.createElement('div');
     el.className = 'flower';
     el.innerText = flowers[Math.floor(Math.random()*flowers.length)];
@@ -110,11 +177,8 @@
   }
 
   setInterval(() => {
-    if (mainCard.style.display === 'block') {
-      createHeart();
-      createFlower();
-    }
-  }, 400);
+    if (mainCard.style.display === 'block') createFlower();
+  }, 350);
 </script>
 
 <audio id="bgMusic" src="bg.mp3" autoplay loop muted></audio>
